@@ -52,7 +52,7 @@ func (interp *Interpreter) gta(root *node, rpath string) ([]*node, error) {
 					val = src.rval
 				}
 				if typ.incomplete {
-					// Come back when type is known
+					// Come back when type is known.
 					revisit = append(revisit, n)
 					return false
 				}
@@ -75,6 +75,11 @@ func (interp *Interpreter) gta(root *node, rpath string) ([]*node, error) {
 			l := len(n.child) - 1
 			if n.typ = n.child[l].typ; n.typ == nil {
 				if n.typ, err = nodeType(interp, sc, n.child[l]); err != nil {
+					return false
+				}
+				if n.typ.incomplete {
+					// Come back when type is known.
+					revisit = append(revisit, n)
 					return false
 				}
 			}
